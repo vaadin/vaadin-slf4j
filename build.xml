@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<project name="vaadin-slf4j" basedir="." default="all"
+    xmlns:ivy="antlib:org.apache.ivy.ant">
+    <description>
+    </description>
+
+    <property name="name" value="vaadin-slf4j-jdk14" />
+    <!-- Please note that the META-INF files are not automatically updated 
+        during build -->
+    <property name="version" value="1.6.1" />
+
+    <property name="javadoc.dir" location="dist/javadoc" />
+    <ivy:resolve file="ivy.xml" conf="slf4j, slf4j-sources, jarjar" />
+    <ivy:cachepath pathid="jarjar.deps" conf="jarjar" />
+    <ivy:cachepath pathid="slf4j.deps" conf="slf4j" />
+    <ivy:cachepath pathid="slf4j-sources.deps" conf="slf4j-sources" />
+    <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
+        classpathref="jarjar.deps" />
+
+    <target name="all" depends="jars,javadoc">
+    </target>
+    <target name="init">
+        <!-- Fetch references to slf4j* -->
+        <mkdir dir="dist" />
+        <copy todir="dist/slf4j" flatten="true">
+            <path refid="slf4j.deps" />
+        </copy>
+        <copy todir="dist/slf4j-sources" flatten="true">
+            <path refid="slf4j-sources.deps" />
+        </copy>
+    </target>
+
+    <target name="jars" depends="init">
+        <!-- Jarjar into one -->
+        <!-- Fix manifest + OSGi -->
+        <jarjar jarfile="dist/tmp.jar">
+            <zipfileset src="dist/slf4j/slf4j-api-${version}.jar">
+                <exclude name="META-INF/**" />
+            </zipfileset>
+            <zipfileset src="dist/slf4j/slf4j-jdk14-${version}.jar">
+                <exclude name="META-INF/**" />
+            </zipfileset>
+
+            <rule pattern="org.slf4j.**" result="com.vaadin.external.org.slf4j.@1" />
+            <fileset dir="." includes="META-INF/maven/**" />
+        </jarjar>
+
+        <jarjar jarfile="dist/tmp-src.jar">
+            <zipfileset
+                src="dist/slf4j-sources/slf4j-api-${version}-sources.jar">
+                <exclude name="META-INF/**" />
+            </zipfileset>
+            <zipfileset
+                src="dist/slf4j-sources/slf4j-jdk14-${version}-sources.jar">
+                <exclude name="META-INF/**" />
+            </zipfileset>
+
+            <rule pattern="org.slf4j.**" result="com.vaadin.external.org.slf4j.@1" />
+        </jarjar>
+
+        <jar jarfile="dist/${name}-${version}.jar" manifest="META-INF/MANIFEST.MF">
+            <zipfileset src="dist/tmp.jar" excludes="org/**" />
+        </jar>
+
+        <jar jarfile="dist/${name}-${version}-sources.jar">
+            <zipfileset src="dist/tmp-src.jar" excludes="org/**" />
+        </jar>
+
+    </target>
+
+    <target name="javadoc" depends="jars">
+
+        <unjar src="dist/${name}-${version}-sources.jar" dest="dist/src" />
+
+        <javadoc destdir="${javadoc.dir}" author="true" version="true"
+            use="true">
+            <packageset dir="dist/src" defaultexcludes="yes">
+                <include name="com/vaadin/external/org/slf4j/**" />
+            </packageset>
+            <fileset dir="dist/src">
+            </fileset>
+        </javadoc>
+
+        <!-- Create a javadoc jar -->
+        <jar file="dist/${name}-${version}-javadoc.jar" compress="true">
+            <fileset dir="${javadoc.dir}" />
+        </jar>
+    </target>
+</project>
