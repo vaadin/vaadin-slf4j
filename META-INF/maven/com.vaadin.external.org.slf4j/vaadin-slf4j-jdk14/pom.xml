@@ -6,6 +6,7 @@
 
   <groupId>com.vaadin.external.org.slf4j</groupId>
   <artifactId>vaadin-slf4j-jdk14</artifactId>
+  <version>1.6.1</version>
   <packaging>jar</packaging>
   <name>vaadin-slf4j-jdk14</name>
   <url>http://www.slf4j.org</url>
