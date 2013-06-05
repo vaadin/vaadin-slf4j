@@ -11,6 +11,23 @@
   <name>vaadin-slf4j-jdk14</name>
   <url>http://www.slf4j.org</url>
   <description>Slf4j API + JDK14 binding rebased to com.vaadin.external</description>
+  <licenses>
+    <license>
+      <name>The MIT License</name>
+      <url>http://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>slf4jdev</id>
+      <name>SLF4J developer</name>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:https:https://github.com/qos-ch/slf4j.git</connection>
+    <developerConnection>scm:git@github.com:qos-ch/slf4j.git</developerConnection>
+    <url>https://github.com/qos-ch/slf4j</url>
+  </scm>
 
   <dependencies>
 
