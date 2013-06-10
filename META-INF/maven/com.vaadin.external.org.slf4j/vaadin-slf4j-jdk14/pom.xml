@@ -4,7 +4,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.vaadin.external.org.slf4j</groupId>
+  <groupId>com.vaadin.external.slf4j</groupId>
   <artifactId>vaadin-slf4j-jdk14</artifactId>
   <version>1.6.1</version>
   <packaging>jar</packaging>
